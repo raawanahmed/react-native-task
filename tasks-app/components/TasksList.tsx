@@ -49,13 +49,13 @@ export const TasksList = ({ tasks }: TProps) => {
         <Text style={styles.taskDescription}>{item.description}</Text>
         <View style={styles.actions}>
           <TouchableOpacity>
-            <AntDesign name={item.isLiked ? "heart" : "hearto"} size={20} color="black" onPress={()=>handleAddTaskToFavs(item)} />
+            <AntDesign name={item.isLiked ? "heart" : "hearto"} size={20} color="#ca8a04" onPress={()=>handleAddTaskToFavs(item)} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.delete}
             onPress={() => handleDeleteTask(item.id)}
           >
-            <AntDesign name="delete" size={20} color="black" />
+            <AntDesign name="delete" size={20} color="gray" />
           </TouchableOpacity>
         </View>
       </View>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   taskName: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "500",
     color: "#1f2633",
   },
   taskDescription: {
