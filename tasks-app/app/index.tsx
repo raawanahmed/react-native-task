@@ -4,54 +4,43 @@ import { MyButton } from "@/components/MyButton";
 import React, { useState, useEffect } from "react";
 import { TaskModal } from "@/components/TaskModal";
 import { TasksList } from "@/components/TasksList";
-
+import useTasksStore, { emptyTask } from "@/store/tasks";
+import { addTask, fetchTasks } from "@/mockAPIs";
+import { useId } from "react";
 type TTask = {
+  id: string;
   name: string;
   description: string;
 };
 
 const Welcome = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const id = useId();
+  const { tasks, setTasks } = useTasksStore((state) => ({
+    tasks: state.tasks,
+    setTasks: state.setTasks,
+  }));
 
-  const [tasks, setTasks] = useState<TTask[]>([]);
-
-  // const addTask = (task: TTask) => {
-  //   setTasks([...tasks, task]);
-  // };
-  const addTask = async (task: TTask) => {
+  const handleAddTask = async (task: TTask) => {
     try {
-      const response = await fetch("http://localhost:3000/tasks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(task),
-      });
-      const newTask = await response.json();
-      // console.log(newTask);
-      setTasks((prevTasks) => [...prevTasks, newTask]);
+      task.id = id;
+      const newTasks = await addTask(task, tasks);
+      if (newTasks) setTasks(newTasks);
     } catch (error) {
       console.error("Error adding task:", error);
     }
   };
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const res = await fetch("http://localhost:3000/tasks", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const tasks = await res.json();
-        //  console.log(tasks);
-        setTasks(tasks);
-      } catch (error) {
-        console.log("error?");
-      }
-    };
-    fetchTasks();
+    try {
+      const getTasks = async () => {
+        const res = await fetchTasks();
+        setTasks(res);
+      };
+      getTasks();
+    } catch (error) {
+      console.error("Error adding task:", error);
+    }
   }, []);
 
   return (
@@ -72,7 +61,9 @@ const Welcome = () => {
           <TaskModal
             isModalVisible={isModalVisible}
             setIsModalVisible={setIsModalVisible}
-            addTask={addTask}
+            addTask={handleAddTask}
+            task={emptyTask}
+            btnTtile="Add Task"
           />
           <TasksList tasks={tasks} />
         </View>

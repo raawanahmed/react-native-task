@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -8,27 +8,41 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { MyButton } from "./MyButton";
+import useTasksStore from "@/store/tasks";
+import { updateTask } from "@/mockAPIs";
 
 type TProps = {
   isModalVisible: boolean;
   setIsModalVisible: (isVisible: boolean) => void;
-  addTask: (task: { name: string; description: string }) => void;
+  addTask?: (task: TTask) => Promise<void>;
+  task: TTask;
+  btnTtile: string;
 };
 
 export const TaskModal = ({
   isModalVisible,
   setIsModalVisible,
   addTask,
+  task,
+  btnTtile,
 }: TProps) => {
-  const [taskName, setTaskName] = useState("");
-  const [taskDescription, setTaskDescription] = useState("");
+  const [selectedTask, setSelectedTask] = useState(task);
+  const { tasks, setTasks } = useTasksStore((state) => ({
+    tasks: state.tasks,
+    setTasks: state.setTasks,
+  }));
 
-  const handleAddTask = () => {
-    addTask({ name: taskName, description: taskDescription });
-    setTaskName("");
-    setTaskDescription("");
+  const handleTaskAction = async () => {
+    if (btnTtile === "Update task") {
+      const updatedTasks = await updateTask(selectedTask, tasks);
+      if (updatedTasks) setTasks(updatedTasks);
+    } else if (addTask) addTask(selectedTask);
     setIsModalVisible(false);
   };
+
+  useEffect(() => {
+    setSelectedTask(task);
+  }, [task]);
 
   return (
     <Modal transparent={true} visible={isModalVisible}>
@@ -37,27 +51,29 @@ export const TaskModal = ({
           <TouchableWithoutFeedback>
             <View style={styles.modalBody}>
               <TextInput
-                value={taskName}
+                value={selectedTask.name}
                 placeholder="Task name"
                 style={styles.taskNameText}
-                onChangeText={(taskName) => setTaskName(taskName)}
+                onChangeText={(taskName) =>
+                  setSelectedTask({ ...task, name: taskName })
+                }
               />
               <View style={styles.descriptionBody}>
                 <Text>Description</Text>
                 <TextInput
                   placeholder="Add a more detailed description"
                   style={styles.descriptionText}
-                  value={taskDescription}
+                  value={selectedTask.description}
                   numberOfLines={4}
                   onChangeText={(taskDescription) =>
-                    setTaskDescription(taskDescription)
+                    setSelectedTask({ ...task, description: taskDescription })
                   }
                 />
               </View>
               <View style={styles.btn}>
                 <MyButton
-                  btnTitle="Add Task"
-                  actionOnPress={() => handleAddTask()}
+                  btnTitle={btnTtile}
+                  actionOnPress={() => handleTaskAction()}
                 />
               </View>
             </View>
@@ -81,7 +97,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 15,
     width: 350,
-    height: 400,
+    height: 300,
     position: "relative",
   },
 

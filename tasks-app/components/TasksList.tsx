@@ -1,7 +1,18 @@
-import React from "react";
-import { View, Text, StyleSheet, FlatList, ScrollView } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
+import { TaskModal } from "./TaskModal";
+import useTasksStore from "@/store/tasks";
+import { AntDesign } from "@expo/vector-icons";
+import { deleteTask } from "@/mockAPIs";
 
 type TTask = {
+  id: string;
   name: string;
   description: string;
 };
@@ -11,11 +22,38 @@ type TProps = {
 };
 
 export const TasksList = ({ tasks }: TProps) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { selectedTask, setSelectedTask, setTasks } = useTasksStore(
+    (state) => ({
+      setSelectedTask: state.setSelectedTask,
+      selectedTask: state.selectedTask,
+      setTasks: state.setTasks,
+    })
+  );
+
+  const handleTaskPress = (task: TTask) => {
+    setSelectedTask(task);
+    setIsModalVisible(true);
+  };
+
+  const handleDeleteTask = async (taskId: string) => {
+    const updatedTasks = await deleteTask(taskId, tasks);
+    if (updatedTasks) setTasks(updatedTasks);
+  };
+
   const renderItem = ({ item }: { item: TTask }) => (
-    <View style={styles.taskContainer}>
-      <Text style={styles.taskName}>{item.name}</Text>
-      <Text style={styles.taskDescription}>{item.description}</Text>
-    </View>
+    <TouchableOpacity onPress={() => handleTaskPress(item)}>
+      <View style={styles.taskContainer}>
+        <Text style={styles.taskName}>{item.name}</Text>
+        <Text style={styles.taskDescription}>{item.description}</Text>
+        <TouchableOpacity
+          style={styles.delete}
+          onPress={() => handleDeleteTask(item.id)}
+        >
+          <AntDesign name="delete" size={20} color="black" />
+        </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -24,6 +62,12 @@ export const TasksList = ({ tasks }: TProps) => {
         data={tasks}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
+      />
+      <TaskModal
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+        task={selectedTask}
+        btnTtile="Update task"
       />
     </View>
   );
@@ -45,10 +89,14 @@ const styles = StyleSheet.create({
   taskName: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "#1f2633",
   },
   taskDescription: {
     fontSize: 14,
     marginTop: 5,
     color: "#666",
+  },
+  delete: {
+    alignSelf: "flex-end",
   },
 });
