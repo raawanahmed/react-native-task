@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MyButton } from "@/components/MyButton";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TaskModal } from "@/components/TaskModal";
 import { TasksList } from "@/components/TasksList";
 
@@ -15,9 +15,44 @@ const Welcome = () => {
 
   const [tasks, setTasks] = useState<TTask[]>([]);
 
-  const addTask = (task: TTask) => {
-    setTasks([...tasks, task]);
+  // const addTask = (task: TTask) => {
+  //   setTasks([...tasks, task]);
+  // };
+  const addTask = async (task: TTask) => {
+    try {
+      const response = await fetch("http://localhost:3000/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task),
+      });
+      const newTask = await response.json();
+     // console.log(newTask);
+      setTasks((prevTasks) => [...prevTasks, newTask]);
+    } catch (error) {
+      console.error("Error adding task:", error);
+    }
   };
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/tasks", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const tasks = await res.json();
+      //  console.log(tasks);
+        setTasks(tasks);
+      } catch (error) {
+        console.log("error?");
+      }
+    };
+    fetchTasks();
+  }, []);
 
   return (
     <SafeAreaView>
