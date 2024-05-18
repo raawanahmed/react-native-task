@@ -28,7 +28,7 @@ const Welcome = () => {
         body: JSON.stringify(task),
       });
       const newTask = await response.json();
-     // console.log(newTask);
+      // console.log(newTask);
       setTasks((prevTasks) => [...prevTasks, newTask]);
     } catch (error) {
       console.error("Error adding task:", error);
@@ -45,7 +45,7 @@ const Welcome = () => {
           },
         });
         const tasks = await res.json();
-      //  console.log(tasks);
+        //  console.log(tasks);
         setTasks(tasks);
       } catch (error) {
         console.log("error?");
@@ -55,11 +55,10 @@ const Welcome = () => {
   }, []);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.safeArea}>
       <ScrollView
         contentContainerStyle={{
           height: "100%",
-          padding: 20,
         }}
       >
         <View style={styles.container}>
@@ -85,6 +84,9 @@ const Welcome = () => {
 export default Welcome;
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
   btn: {
     alignItems: "flex-end",
     marginTop: 8,
@@ -93,9 +95,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "500",
   },
-
   container: {
-    position: "relative",
+    padding: 20,
     // height: '100%'
   },
 });
