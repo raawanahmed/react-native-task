@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MyButton } from "@/components/MyButton";
 import React, { useState } from "react";
@@ -24,15 +24,17 @@ const Welcome = () => {
       <ScrollView
         contentContainerStyle={{
           height: "100%",
+          padding: 20,
         }}
       >
-        <View>
-          <Text>Tasks App</Text>
-          <MyButton
-            btnColor="black"
-            btnTitle="Add Task"
-            actionOnPress={() => setIsModalVisible(true)}
-          />
+        <View style={styles.container}>
+          <Text style={styles.textHeader}>Jobless</Text>
+          <View style={styles.btn}>
+            <MyButton
+              btnTitle="Add Task"
+              actionOnPress={() => setIsModalVisible(true)}
+            />
+          </View>
           <TaskModal
             isModalVisible={isModalVisible}
             setIsModalVisible={setIsModalVisible}
@@ -46,3 +48,19 @@ const Welcome = () => {
 };
 
 export default Welcome;
+
+const styles = StyleSheet.create({
+  btn: {
+    alignItems: "flex-end",
+    marginTop: 8,
+  },
+  textHeader: {
+    fontSize: 24,
+    fontWeight: "500",
+  },
+
+  container: {
+    position: "relative",
+    // height: '100%'
+  },
+});

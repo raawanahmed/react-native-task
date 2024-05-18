@@ -2,17 +2,13 @@ import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 
 type TProps = {
   btnTitle: string;
-  btnColor: string;
   actionOnPress: () => void;
 };
 
-export const MyButton = ({ btnTitle, btnColor, actionOnPress }: TProps) => {
+export const MyButton = ({ btnTitle, actionOnPress }: TProps) => {
   return (
     <View>
-      <TouchableOpacity
-        style={[styles.buttonStyle, { backgroundColor: btnColor }]}
-        onPress={actionOnPress}
-      >
+      <TouchableOpacity style={styles.buttonStyle} onPress={actionOnPress}>
         <Text style={styles.textStyle}> {btnTitle}</Text>
       </TouchableOpacity>
     </View>
@@ -22,15 +18,15 @@ export const MyButton = ({ btnTitle, btnColor, actionOnPress }: TProps) => {
 const styles = StyleSheet.create({
   buttonStyle: {
     textAlign: "center",
-    padding: 10,
+    padding: 8,
     borderRadius: 10,
     width: 100,
-    marginHorizontal: 5,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(234, 179, 8, 0.1)",
   },
   textStyle: {
-    color: "white",
+    color: "#ca8a04",
     fontSize: 16,
   },
   viewStyle: {

@@ -40,7 +40,7 @@ export const TaskModal = ({
                 value={taskName}
                 placeholder="Task name"
                 style={styles.taskNameText}
-                onChangeText={(taskName)=>setTaskName(taskName)}
+                onChangeText={(taskName) => setTaskName(taskName)}
               />
               <View style={styles.descriptionBody}>
                 <Text>Description</Text>
@@ -49,14 +49,17 @@ export const TaskModal = ({
                   style={styles.descriptionText}
                   value={taskDescription}
                   numberOfLines={4}
-                  onChangeText={(taskDescription)=>setTaskDescription(taskDescription)}
+                  onChangeText={(taskDescription) =>
+                    setTaskDescription(taskDescription)
+                  }
                 />
               </View>
-              <MyButton
-                btnColor="black"
-                btnTitle="Add Task"
-                actionOnPress={() => handleAddTask()}
-              />
+              <View style={styles.btn}>
+                <MyButton
+                  btnTitle="Add Task"
+                  actionOnPress={() => handleAddTask()}
+                />
+              </View>
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -77,8 +80,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     borderRadius: 15,
-    width: 400,
-    height: 500,
+    width: 350,
+    height: 400,
+    position: "relative",
   },
 
   taskNameText: {
@@ -88,8 +92,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
   },
-
-  dueDate: {},
 
   descriptionBody: {
     marginTop: 10,
@@ -103,5 +105,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     borderWidth: 1,
+  },
+
+  btn: {
+    position: "absolute",
+    bottom: 10,
   },
 });

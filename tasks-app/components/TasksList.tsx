@@ -1,4 +1,6 @@
-import { View, Text, StyleSheet } from "react-native";
+import React from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
+
 type TTask = {
   name: string;
   description: string;
@@ -9,21 +11,27 @@ type TProps = {
 };
 
 export const TasksList = ({ tasks }: TProps) => {
-  console.log(tasks);
+  const renderItem = ({ item }: { item: TTask }) => (
+    <View style={styles.taskContainer}>
+      <Text style={styles.taskName}>{item.name}</Text>
+      <Text style={styles.taskDescription}>{item.description}</Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
-      {tasks.map((task, index) => (
-        <View key={index} style={styles.taskContainer}>
-          <Text style={styles.taskName}>{task.name}</Text>
-          <Text style={styles.taskDescription}>{task.description}</Text>
-        </View>
-      ))}
+      <FlatList
+        data={tasks}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 10,
   },
   taskContainer: {
