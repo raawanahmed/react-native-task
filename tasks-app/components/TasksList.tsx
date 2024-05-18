@@ -9,13 +9,8 @@ import {
 import { TaskModal } from "./TaskModal";
 import useTasksStore from "@/store/tasks";
 import { AntDesign } from "@expo/vector-icons";
-import { deleteTask } from "@/mockAPIs";
+import { deleteTask, updateTask } from "@/mockAPIs";
 
-type TTask = {
-  id: string;
-  name: string;
-  description: string;
-};
 
 type TProps = {
   tasks: TTask[];
@@ -41,17 +36,28 @@ export const TasksList = ({ tasks }: TProps) => {
     if (updatedTasks) setTasks(updatedTasks);
   };
 
+  const handleAddTaskToFavs = async (task: TTask) => {
+    task.isLiked = !task.isLiked;
+    const updatedTasks = await updateTask(task, tasks);
+    if (updatedTasks) setTasks(updatedTasks);
+  }
+
   const renderItem = ({ item }: { item: TTask }) => (
     <TouchableOpacity onPress={() => handleTaskPress(item)}>
       <View style={styles.taskContainer}>
         <Text style={styles.taskName}>{item.name}</Text>
         <Text style={styles.taskDescription}>{item.description}</Text>
-        <TouchableOpacity
-          style={styles.delete}
-          onPress={() => handleDeleteTask(item.id)}
-        >
-          <AntDesign name="delete" size={20} color="black" />
-        </TouchableOpacity>
+        <View style={styles.actions}>
+          <TouchableOpacity>
+            <AntDesign name={item.isLiked ? "heart" : "hearto"} size={20} color="black" onPress={()=>handleAddTaskToFavs(item)} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.delete}
+            onPress={() => handleDeleteTask(item.id)}
+          >
+            <AntDesign name="delete" size={20} color="black" />
+          </TouchableOpacity>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -95,6 +101,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 5,
     color: "#666",
+  },
+  actions:{
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 8,
+    justifyContent: 'flex-end'
   },
   delete: {
     alignSelf: "flex-end",

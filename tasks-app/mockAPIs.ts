@@ -9,7 +9,7 @@ export const fetchTasks = async () => {
     const tasks = await res.json();
     return tasks;
   } catch (error) {
-    console.log("error?");
+    console.log("error?", error);
   }
 };
 

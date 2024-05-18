@@ -3,7 +3,8 @@ import { create } from 'zustand';
 export const emptyTask = {
     id: '',
     name: '',
-    description: ''
+    description: '',
+    isLiked: false
 }
 
 type TTaskStore = {

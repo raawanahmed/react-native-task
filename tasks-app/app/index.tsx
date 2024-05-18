@@ -7,11 +7,6 @@ import { TasksList } from "@/components/TasksList";
 import useTasksStore, { emptyTask } from "@/store/tasks";
 import { addTask, fetchTasks } from "@/mockAPIs";
 import { useId } from "react";
-type TTask = {
-  id: string;
-  name: string;
-  description: string;
-};
 
 const Welcome = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
