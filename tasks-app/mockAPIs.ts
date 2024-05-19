@@ -9,7 +9,7 @@ export const fetchTasks = async () => {
     const tasks = await res.json();
     return tasks;
   } catch (error) {
-    console.log("error?", error);
+    console.log("Error getting all tasks:", error);
   }
 };
 
@@ -65,7 +65,7 @@ export const deleteTask = async (taskId: string, tasks: TTask[]) => {
     const updatedTasks = tasks.filter((t) => t.id !== taskId);
     return updatedTasks;
   } catch (error) {
-    console.error("Error updating task:", error);
+    console.error("Error deleting task:", error);
   }
 };
 
@@ -81,6 +81,6 @@ export const fetchFavTasks = async () => {
     const favTasks = tasks.filter((task: TTask) => task.isLiked === true);
     return favTasks;
   } catch (error) {
-    console.log("error?", error);
+    console.log("Error fetching fav tasks", error);
   }
 };
