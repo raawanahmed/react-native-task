@@ -52,20 +52,35 @@ export const updateTask = async (task: TTask, tasks: TTask[]) => {
 };
 
 export const deleteTask = async (taskId: string, tasks: TTask[]) => {
-    try {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Failed to delete task");
-      }
-      const updatedTasks = tasks.filter((t) => (t.id !== taskId));
-      return updatedTasks;
-    } catch (error) {
-      console.error("Error updating task:", error);
+  try {
+    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Failed to delete task");
     }
-  };
+    const updatedTasks = tasks.filter((t) => t.id !== taskId);
+    return updatedTasks;
+  } catch (error) {
+    console.error("Error updating task:", error);
+  }
+};
 
+export const fetchFavTasks = async () => {
+  try {
+    const res = await fetch("http://localhost:3000/tasks", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const tasks = await res.json();
+    const favTasks = tasks.filter((task: TTask) => task.isLiked === true);
+    return favTasks;
+  } catch (error) {
+    console.log("error?", error);
+  }
+};
