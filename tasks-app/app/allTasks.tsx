@@ -6,8 +6,7 @@ import { fetchTasks } from "@/mockAPIs";
 import TasksView from "@/components/TasksView";
 
 const AllTasks = () => {
-  const { tasks, setTasks } = useTasksStore((state) => ({
-    tasks: state.tasks,
+  const { setTasks } = useTasksStore((state) => ({
     setTasks: state.setTasks,
   }));
 
@@ -30,7 +29,7 @@ const AllTasks = () => {
           height: "100%",
         }}
       >
-        <TasksView tasks={tasks} />
+        <TasksView />
       </ScrollView>
     </SafeAreaView>
   );

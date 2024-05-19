@@ -7,15 +7,12 @@ import useTasksStore, { emptyTask } from "@/store/tasks";
 import { addTask } from "@/mockAPIs";
 import { useId } from "react";
 
-type TPorps = {
-  tasks: TTask[];
-};
-
-const TasksView = ({ tasks }: TPorps) => {
+const TasksView = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const id = useId();
-  const { setTasks } = useTasksStore((state) => ({
+  const { setTasks, tasks } = useTasksStore((state) => ({
     setTasks: state.setTasks,
+    tasks: state.tasks,
   }));
 
   const handleAddTask = async (task: TTask) => {
@@ -43,7 +40,7 @@ const TasksView = ({ tasks }: TPorps) => {
         task={emptyTask}
         btnTtile="Add Task"
       />
-      <TasksList tasks={tasks} />
+      <TasksList />
     </View>
   );
 };

@@ -11,18 +11,14 @@ import useTasksStore from "@/store/tasks";
 import { AntDesign } from "@expo/vector-icons";
 import { deleteTask, updateTask } from "@/mockAPIs";
 
-
-type TProps = {
-  tasks: TTask[];
-};
-
-export const TasksList = ({ tasks }: TProps) => {
+export const TasksList = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { selectedTask, setSelectedTask, setTasks } = useTasksStore(
+  const { selectedTask, setSelectedTask, setTasks, tasks } = useTasksStore(
     (state) => ({
       setSelectedTask: state.setSelectedTask,
       selectedTask: state.selectedTask,
       setTasks: state.setTasks,
+      tasks: state.tasks,
     })
   );
 
@@ -36,11 +32,12 @@ export const TasksList = ({ tasks }: TProps) => {
     if (updatedTasks) setTasks(updatedTasks);
   };
 
-  const handleAddTaskToFavs = async (task: TTask) => {
+  const handleToggleIsTaskFav = async (task: TTask) => {
     task.isLiked = !task.isLiked;
     const updatedTasks = await updateTask(task, tasks);
+    console.log(updatedTasks);
     if (updatedTasks) setTasks(updatedTasks);
-  }
+  };
 
   const renderItem = ({ item }: { item: TTask }) => (
     <TouchableOpacity onPress={() => handleTaskPress(item)}>
@@ -49,7 +46,12 @@ export const TasksList = ({ tasks }: TProps) => {
         <Text style={styles.taskDescription}>{item.description}</Text>
         <View style={styles.actions}>
           <TouchableOpacity>
-            <AntDesign name={item.isLiked ? "heart" : "hearto"} size={20} color="#ca8a04" onPress={()=>handleAddTaskToFavs(item)} />
+            <AntDesign
+              name={item.isLiked ? "heart" : "hearto"}
+              size={20}
+              color="#ca8a04"
+              onPress={() => handleToggleIsTaskFav(item)}
+            />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.delete}
@@ -102,11 +104,11 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: "#666",
   },
-  actions:{
-    display: 'flex',
-    flexDirection: 'row',
+  actions: {
+    display: "flex",
+    flexDirection: "row",
     gap: 8,
-    justifyContent: 'flex-end'
+    justifyContent: "flex-end",
   },
   delete: {
     alignSelf: "flex-end",
