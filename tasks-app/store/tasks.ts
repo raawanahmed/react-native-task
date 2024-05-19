@@ -7,6 +7,13 @@ export const emptyTask = {
     isLiked: false
 }
 
+export const emptyFavTask = {
+    id: '',
+    name: '',
+    description: '',
+    isLiked: true
+}
+
 type TTaskStore = {
     tasks: TTask[];
     selectedTask: TTask;

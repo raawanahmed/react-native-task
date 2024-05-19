@@ -3,11 +3,13 @@ import { MyButton } from "@/components/MyButton";
 import React, { useState } from "react";
 import { TaskModal } from "@/components/TaskModal";
 import { TasksList } from "@/components/TasksList";
-import useTasksStore, { emptyTask } from "@/store/tasks";
+import useTasksStore, { emptyFavTask, emptyTask } from "@/store/tasks";
 import { addTask } from "@/mockAPIs";
 import { useId } from "react";
-
-const TasksView = () => {
+type TProps = {
+  isFav?: boolean;
+};
+const TasksView = ({ isFav }: TProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const id = useId();
   const { setTasks, tasks } = useTasksStore((state) => ({
@@ -37,7 +39,7 @@ const TasksView = () => {
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
         addTask={handleAddTask}
-        task={emptyTask}
+        task={isFav ? emptyFavTask : emptyTask}
         btnTtile="Add Task"
       />
       <TasksList />

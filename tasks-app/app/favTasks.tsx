@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import useTasksStore from "@/store/tasks";
 import { fetchFavTasks, fetchTasks } from "@/mockAPIs";
 import TasksView from "@/components/TasksView";
@@ -30,7 +30,7 @@ const FavTasks = () => {
           height: "100%",
         }}
       >
-        <TasksView />
+        <TasksView isFav={true} />
       </ScrollView>
     </SafeAreaView>
   );
