@@ -29,7 +29,7 @@ const AllTasks = () => {
           height: "100%",
         }}
       >
-        <TasksView />
+        <TasksView isFav={false}/>
       </ScrollView>
     </SafeAreaView>
   );

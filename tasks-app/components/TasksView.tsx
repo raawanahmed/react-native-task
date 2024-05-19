@@ -42,7 +42,7 @@ const TasksView = ({ isFav }: TProps) => {
         task={isFav ? emptyFavTask : emptyTask}
         btnTtile="Add Task"
       />
-      <TasksList />
+      <TasksList isFav={isFav} />
     </View>
   );
 };

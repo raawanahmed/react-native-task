@@ -9,9 +9,11 @@ import {
 import { TaskModal } from "./TaskModal";
 import useTasksStore from "@/store/tasks";
 import { AntDesign } from "@expo/vector-icons";
-import { deleteTask, updateTask } from "@/mockAPIs";
-
-export const TasksList = () => {
+import { deleteTask, fetchTasks, updateTask } from "@/mockAPIs";
+type TProps = {
+  isFav?: boolean;
+};
+export const TasksList = ({ isFav }: TProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { selectedTask, setSelectedTask, setTasks, tasks } = useTasksStore(
     (state) => ({
@@ -35,8 +37,16 @@ export const TasksList = () => {
   const handleToggleIsTaskFav = async (task: TTask) => {
     task.isLiked = !task.isLiked;
     const updatedTasks = await updateTask(task, tasks);
-    console.log(updatedTasks);
-    if (updatedTasks) setTasks(updatedTasks);
+    if (updatedTasks) {
+      if (isFav) {
+        const filtered = updatedTasks.filter(
+          (task: TTask) => task.isLiked === true
+        );
+        setTasks(filtered);
+      } else {
+        setTasks(updatedTasks);
+      }
+    }
   };
 
   const renderItem = ({ item }: { item: TTask }) => (
@@ -69,7 +79,7 @@ export const TasksList = () => {
       <FlatList
         data={tasks}
         renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.id}
       />
       <TaskModal
         isModalVisible={isModalVisible}
